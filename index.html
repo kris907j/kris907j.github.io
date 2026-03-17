@@ -6,11 +6,15 @@
     <title>San Francisco Crime Analysis Portfolio</title>
     <style>
         :root {
-            --bg: #f7f7f5;
+            --bg: #f5f7fb;
             --surface: #ffffff;
             --text: #111111;
             --muted: #4b4b4b;
             --border: #d8d8d8;
+            --brand: #0f5aa6;
+            --brand-soft: #e9f2ff;
+            --sunset: #f2994a;
+            --mint: #2f9c95;
         }
 
         * {
@@ -20,9 +24,74 @@
         body {
             margin: 0;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            background: radial-gradient(circle at top right, #ffffff 0%, var(--bg) 65%);
+            background:
+                radial-gradient(circle at 12% 8%, #eef4ff 0%, transparent 45%),
+                radial-gradient(circle at 88% 15%, #fff2e8 0%, transparent 38%),
+                radial-gradient(circle at 40% 75%, #ecfffb 0%, transparent 42%),
+                var(--bg);
             color: var(--text);
             line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .topbar {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(6px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .topbar-inner {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+            min-height: 62px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .brand {
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            color: var(--brand);
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .menu {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: var(--text);
+            font-size: 0.94rem;
+            padding: 0.35rem 0.7rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .menu a:hover {
+            border-color: #c9dbf4;
+            background: var(--brand-soft);
+            color: var(--brand);
+        }
+
+        .menu a.current {
+            border-color: #c9dbf4;
+            background: var(--brand-soft);
+            color: var(--brand);
+            font-weight: 600;
         }
 
         .container {
@@ -54,16 +123,20 @@
             gap: 1.5rem;
         }
 
-        .viz-card {
+        .page-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+            padding: 1.2rem 1.4rem;
+            box-shadow: 0 10px 32px rgba(10, 30, 60, 0.08);
         }
 
-        .viz-content {
-            padding: 1.2rem 1.4rem;
+        .page-card:nth-of-type(1) {
+            border-top: 6px solid var(--brand);
+        }
+
+        .page-card:nth-of-type(2) {
+            border-top: 6px solid var(--sunset);
         }
 
         h2 {
@@ -76,20 +149,15 @@
             color: var(--muted);
         }
 
-        iframe,
-        img {
-            width: 100%;
-            display: block;
-            border: 0;
-            background: #fff;
-        }
-
-        iframe {
-            height: 620px;
-        }
-
-        img {
-            height: auto;
+        .card-link {
+            display: inline-block;
+            margin-top: 1rem;
+            text-decoration: none;
+            color: #ffffff;
+            background: var(--brand);
+            border-radius: 10px;
+            padding: 0.5rem 0.85rem;
+            font-weight: 600;
         }
 
         footer {
@@ -99,71 +167,59 @@
             border-top: 1px solid var(--border);
         }
 
-        @media (max-width: 900px) {
-            iframe {
-                height: 480px;
-            }
-        }
-
         @media (max-width: 620px) {
+            .topbar-inner {
+                min-height: auto;
+                padding: 0.55rem 0;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
             header {
                 padding-top: 2.2rem;
-            }
-
-            .viz-content {
-                padding: 1rem;
-            }
-
-            iframe {
-                height: 380px;
             }
         }
     </style>
 </head>
 <body>
+    <nav class="topbar" aria-label="Main navigation">
+        <div class="topbar-inner">
+            <a class="brand" href="#top">SF Crime Portfolio</a>
+            <div class="menu">
+                <a class="current" href="index.html">Home</a>
+                <a href="interactive.html">Interactive Plots</a>
+                <a href="images.html">Image Visuals</a>
+            </div>
+        </div>
+    </nav>
+
     <header>
-        <div class="container">
+        <div class="container" id="top">
             <h1>San Francisco Crime Analysis</h1>
-            <p class="intro">
-                This portfolio presents three complementary visualizations exploring crime patterns in San Francisco.
-                Together they highlight time-based behavior, district-level differences, and the geographic concentration
-                of incidents.
+            <p class="intro" id="overview">
+                Explore a focused data science portfolio analyzing crime patterns in San Francisco.
+                The work is split into interactive analysis pages and image-based summaries.
             </p>
         </div>
     </header>
 
     <main class="container">
-        <section class="viz-card" aria-labelledby="sunday-heading">
-            <div class="viz-content">
-                <h2 id="sunday-heading">Sunday Crime Patterns: Interactive View</h2>
-                <p class="description">
-                    An interactive exploration focused on Sunday incidents, designed to reveal how offense categories and
-                    frequencies shift throughout the day.
-                </p>
-            </div>
-            <iframe src="visualizations/crime_sunday_interactive.html" title="Sunday crime interactive visualization" loading="lazy"></iframe>
+        <section class="page-card" aria-labelledby="interactive-overview">
+            <h2 id="interactive-overview">Interactive Analysis Page</h2>
+            <p class="description">
+                View both interactive visualizations in one place: the Sunday-focused exploration and the city-wide
+                crime density heatmap.
+            </p>
+            <a class="card-link" href="interactive.html">Open Interactive Plots</a>
         </section>
 
-        <section class="viz-card" aria-labelledby="heatmap-heading">
-            <div class="viz-content">
-                <h2 id="heatmap-heading">Crime Density Heatmap Across the City</h2>
-                <p class="description">
-                    A spatial heatmap showing where crime reports cluster, helping identify high-intensity areas and
-                    neighborhood-level concentration patterns.
-                </p>
-            </div>
-            <iframe src="visualizations/sf_crime_heatmap.html" title="San Francisco crime heatmap" loading="lazy"></iframe>
-        </section>
-
-        <section class="viz-card" aria-labelledby="district-heading">
-            <div class="viz-content">
-                <h2 id="district-heading">Crime Ratios by District</h2>
-                <p class="description">
-                    A district-level comparison chart that summarizes how crime composition differs across policing
-                    districts, supporting cross-area interpretation and prioritization.
-                </p>
-            </div>
-            <img src="images/crime_ratios_districts.png" alt="Chart comparing crime ratios across San Francisco districts" loading="lazy">
+        <section class="page-card" aria-labelledby="image-overview">
+            <h2 id="image-overview">Image-Based Visual Summary</h2>
+            <p class="description">
+                Browse static visual summaries such as district-level crime ratio charts for fast comparison and
+                reporting.
+            </p>
+            <a class="card-link" href="images.html" style="background: var(--mint);">Open Image Visuals</a>
         </section>
     </main>
 
