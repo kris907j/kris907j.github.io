@@ -15,6 +15,30 @@
             --brand-soft: #e9f2ff;
             --sunset: #f2994a;
             --mint: #2f9c95;
+            --grad-a: #eef4ff;
+            --grad-b: #fff2e8;
+            --grad-c: #ecfffb;
+            --topbar-bg: rgba(255, 255, 255, 0.94);
+            --shadow: 0 10px 32px rgba(10, 30, 60, 0.08);
+            --button-text: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --bg: #0f1218;
+            --surface: #171b22;
+            --text: #f2f4f8;
+            --muted: #c2c9d3;
+            --border: #2a3340;
+            --brand: #7cb3ff;
+            --brand-soft: #1a2637;
+            --sunset: #ffb067;
+            --mint: #66d0c7;
+            --grad-a: #172235;
+            --grad-b: #2c1f1a;
+            --grad-c: #132a26;
+            --topbar-bg: rgba(15, 18, 24, 0.93);
+            --shadow: 0 10px 32px rgba(0, 0, 0, 0.35);
+            --button-text: #0f1218;
         }
 
         * {
@@ -25,12 +49,13 @@
             margin: 0;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             background:
-                radial-gradient(circle at 12% 8%, #eef4ff 0%, transparent 45%),
-                radial-gradient(circle at 88% 15%, #fff2e8 0%, transparent 38%),
-                radial-gradient(circle at 40% 75%, #ecfffb 0%, transparent 42%),
+                radial-gradient(circle at 12% 8%, var(--grad-a) 0%, transparent 45%),
+                radial-gradient(circle at 88% 15%, var(--grad-b) 0%, transparent 38%),
+                radial-gradient(circle at 40% 75%, var(--grad-c) 0%, transparent 42%),
                 var(--bg);
             color: var(--text);
             line-height: 1.6;
+            transition: background-color 0.25s ease, color 0.25s ease;
         }
 
         html {
@@ -41,7 +66,7 @@
             position: sticky;
             top: 0;
             z-index: 20;
-            background: rgba(255, 255, 255, 0.94);
+            background: var(--topbar-bg);
             backdrop-filter: blur(6px);
             border-bottom: 1px solid var(--border);
         }
@@ -71,6 +96,12 @@
             flex-wrap: wrap;
         }
 
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
+        }
+
         .menu a {
             text-decoration: none;
             color: var(--text);
@@ -92,6 +123,16 @@
             background: var(--brand-soft);
             color: var(--brand);
             font-weight: 600;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text);
+            border-radius: 999px;
+            font-size: 0.9rem;
+            padding: 0.35rem 0.75rem;
+            cursor: pointer;
         }
 
         .container {
@@ -128,7 +169,7 @@
             border: 1px solid var(--border);
             border-radius: 14px;
             padding: 1.2rem 1.4rem;
-            box-shadow: 0 10px 32px rgba(10, 30, 60, 0.08);
+            box-shadow: var(--shadow);
         }
 
         .page-card:nth-of-type(1) {
@@ -153,7 +194,7 @@
             display: inline-block;
             margin-top: 1rem;
             text-decoration: none;
-            color: #ffffff;
+            color: var(--button-text);
             background: var(--brand);
             border-radius: 10px;
             padding: 0.5rem 0.85rem;
@@ -185,10 +226,13 @@
     <nav class="topbar" aria-label="Main navigation">
         <div class="topbar-inner">
             <a class="brand" href="#top">SF Crime Portfolio</a>
-            <div class="menu">
-                <a class="current" href="index.html">Home</a>
-                <a href="interactive.html">Interactive Plots</a>
-                <a href="images.html">Image Visuals</a>
+            <div class="nav-actions">
+                <div class="menu">
+                    <a class="current" href="index.html">Home</a>
+                    <a href="interactive.html">Interactive Plots</a>
+                    <a href="images.html">Image Visuals</a>
+                </div>
+                <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle dark mode">Dark mode</button>
             </div>
         </div>
     </nav>
@@ -197,8 +241,10 @@
         <div class="container" id="top">
             <h1>San Francisco Crime Analysis</h1>
             <p class="intro" id="overview">
-                Explore a focused data science portfolio analyzing crime patterns in San Francisco.
-                The work is split into interactive analysis pages and image-based summaries.
+                On this page you can explore crime patterns in San Fransico through two kinds of plots:
+                Interactive vizualizations and image-based summaries.
+                Click the links below to view the different visualizations.
+                This page is in developement.
             </p>
         </div>
     </header>
@@ -207,8 +253,8 @@
         <section class="page-card" aria-labelledby="interactive-overview">
             <h2 id="interactive-overview">Interactive Analysis Page</h2>
             <p class="description">
-                View both interactive visualizations in one place: the Sunday-focused exploration and the city-wide
-                crime density heatmap.
+                View interactive visualizations in one place: 
+                the Sunday-focused exploration and the city-wide crime density heatmap (not working yet).
             </p>
             <a class="card-link" href="interactive.html">Open Interactive Plots</a>
         </section>
@@ -216,8 +262,7 @@
         <section class="page-card" aria-labelledby="image-overview">
             <h2 id="image-overview">Image-Based Visual Summary</h2>
             <p class="description">
-                Browse static visual summaries such as district-level crime ratio charts for fast comparison and
-                reporting.
+                Browse plots of crime patterns across different districts in San Francisco.
             </p>
             <a class="card-link" href="images.html" style="background: var(--mint);">Open Image Visuals</a>
         </section>
@@ -228,5 +273,29 @@
             Data science portfolio focused on exploratory and explanatory crime analysis for San Francisco.
         </div>
     </footer>
+
+    <script>
+        (function () {
+            var storageKey = "sf-theme";
+            var root = document.documentElement;
+            var button = document.getElementById("theme-toggle");
+
+            function setTheme(theme) {
+                root.setAttribute("data-theme", theme);
+                button.textContent = theme === "dark" ? "Light mode" : "Dark mode";
+            }
+
+            var savedTheme = localStorage.getItem(storageKey);
+            var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+            var initialTheme = savedTheme || (prefersDark ? "dark" : "light");
+            setTheme(initialTheme);
+
+            button.addEventListener("click", function () {
+                var nextTheme = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+                setTheme(nextTheme);
+                localStorage.setItem(storageKey, nextTheme);
+            });
+        })();
+    </script>
 </body>
 </html>
